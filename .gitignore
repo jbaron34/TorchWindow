@@ -1,0 +1,7 @@
+/__pycache__
+/.vscode
+/torchwindow/*
+/dist
+/build
+/ext/build
+/*.egg-info
