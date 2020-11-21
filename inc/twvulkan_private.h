@@ -4,9 +4,8 @@
 #define TW_VULKAN_PRIVATE_H
 
 
-#include <sys\timeb.h>
+//#include <sys\timeb.h
 #include <time.h>
-#include <string.h>
 
 #include <twcommon.h>
 #include <twvulkan.h>
@@ -71,7 +70,7 @@ struct TwWindow_T
     unsigned int currentFrame;
 };
 
-const char** catStringLists(const char **a, unsigned int nA, const char **b, unsigned int nB);
+char** catStringLists(const char **a, unsigned int nA, const char **b, unsigned int nB);
 
 int readall(FILE *in, const char **dataptr, unsigned int *sizeptr);
 

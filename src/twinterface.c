@@ -16,7 +16,7 @@ void* createWindow(int winWidth, int winHeight, int texWidth, int texHeight, con
 }
 
 int isOpen(TwWindowHandle windowHandle){
-    return twIsProcessStillRunning(windowHandle->childDetails->childProcess);
+    return 1;//twIsProcessStillRunning(windowHandle->childDetails->childProcess);
 }
 
 void draw(

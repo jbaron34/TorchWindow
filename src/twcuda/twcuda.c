@@ -28,13 +28,20 @@ void twCopy(
     struct cudaExternalSemaphoreWaitParams waitParams = {0};
     struct cudaExternalSemaphoreSignalParams signalParams = {0};
 
-    cudaWaitExternalSemaphoresAsync(&childDetails->updateConsumed, &waitParams, 1, 0);
+    cudaDeviceSynchronize();
+    printf("cudaerror: %s\n", cudaGetErrorString(cudaGetLastError()));
+
+    //cudaWaitExternalSemaphoresAsync(&childDetails->updateConsumed, &waitParams, 1, 0);\
+
+    //cudaMemsetAsync(childDetails->textureMemoryBuffer, 1.0f, 1000, 0);
 
     transposeCopy(
         tensorDataptr, childDetails->textureMemoryBuffer,
         dimA, dimB, dimC,
         parentDetails->texHeight, parentDetails->texWidth, transposeCopyXYZ
     );
+    cudaDeviceSynchronize();
+    printf("cudaerror: %s\n", cudaGetErrorString(cudaGetLastError()));
     
-    cudaSignalExternalSemaphoresAsync(&childDetails->textureUpdated, &signalParams, 1, 0);
+    //cudaSignalExternalSemaphoresAsync(&childDetails->textureUpdated, &signalParams, 1, 0);
 }

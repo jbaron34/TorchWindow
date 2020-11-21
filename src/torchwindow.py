@@ -3,7 +3,7 @@ import torch
 import os
 
 torchWindowDir = os.path.dirname(__file__)
-interfaceLibraryPath = torchWindowDir + "\\twinterface"
+interfaceLibraryPath = torchWindowDir + "/libtwinterface.so"
 
 tw = ctypes.CDLL(interfaceLibraryPath)
 

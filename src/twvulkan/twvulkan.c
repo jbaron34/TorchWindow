@@ -1,6 +1,16 @@
 #include <twvulkan_private.h>
 
-const char** catStringLists(const char **a, unsigned int nA, const char **b, unsigned int nB){
+int min(int a, int b){
+    if(a < b){ return a; }
+    else{ return b; }
+}
+
+int max(int a, int b){
+    if(a > b){ return a; }
+    else{ return b; }
+}
+
+char** catStringLists(const char **a, unsigned int nA, const char **b, unsigned int nB){
     if(nA + nB == 0){
         return NULL;
     }else if(nA == 0){
@@ -228,20 +238,20 @@ void twSetupVkInstance(TwWindow window){
         &createInfo.ppEnabledExtensionNames
     );
 
-    createInfo.enabledLayerCount = 1;
+    createInfo.enabledLayerCount = 0;//1;
     const char *validationLayers[] = {
-        "VK_LAYER_KHRONOS_validation",
+    //    "VK_LAYER_KHRONOS_validation",
     };
     createInfo.ppEnabledLayerNames = validationLayers;
-    twCheckVkValidationLayerSupport(
+    if(twCheckVkValidationLayerSupport(
         createInfo.enabledLayerCount,
         createInfo.ppEnabledLayerNames
-    );
+    ) != TW_TRUE) { printf("Fatal Error - twCheckVkValidationLayerSupport returned TW_FALSE\n"); }
 
     result = vkCreateInstance(&createInfo, NULL, &window->instance);
     if (result != VK_SUCCESS) { printf("Fatal Error - Unable to create Vulkan Instance! Code: %i\n", result); }
 
-    free((void *) createInfo.ppEnabledExtensionNames);
+    free(createInfo.ppEnabledExtensionNames);
 }
 
 int twIsVkPhysicalDeviceSuitable(VkPhysicalDevice device){
@@ -438,6 +448,7 @@ void twSetupVkLogicalDevice(TwWindow window){
     }
 
     vkGetDeviceQueue(window->device, window->graphicsQFIndex, 0, &window->graphicsQueue);
+
     vkGetDeviceQueue(window->device, window->presentQFIndex, 0, &window->presentQueue);
 
     if (!(window->graphicsQueue != NULL & window->presentQueue != NULL)){
@@ -1122,7 +1133,6 @@ TwWindow twCreateWindow(const char *name){
 
     twCreateInstance(window, name);
 
-
     twConnectWindowProcess(
         window->device,
         window->physicalDevice,
@@ -1321,11 +1331,11 @@ int twPollWindowEvents(TwWindow window){
 }
 
 void twRunWindow(TwWindow window){
-    struct timeb start, end;
-    int diff;
+    //struct timeb start, end;
+    //int diff;
     unsigned int frameCount = 0;
     
-    ftime(&start);
+    //ftime(&start);
 
     for(int i=0;;i++){
         if(!twPollWindowEvents(window)){
@@ -1333,8 +1343,20 @@ void twRunWindow(TwWindow window){
         }
         //TEMPrtInitTextureImageLayout(window, i);
         twDrawFrame(window);
+        //printf("frame: %i\n", frameCount);
+
+        char *title;
+        const char *form = "%s - %i FPS";
+        int length = snprintf( NULL, 0, form, window->name, frameCount) + 1;
+        title = malloc(length);
+        snprintf(title, length, form, window->name, frameCount);
+        SDL_SetWindowTitle(window->window, title);
+
+        free(title);
         
-        frameCount++;
+        frameCount++;/*
+
+        
 
         ftime(&end);
         diff = (int) (1000.0 * (end.time - start.time) + (end.millitm - start.millitm));
@@ -1349,6 +1371,6 @@ void twRunWindow(TwWindow window){
             free(title);
             frameCount = 0;
             start = end;
-        }
+        }*/
     }
 }

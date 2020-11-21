@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.13)
 
 # set the project name
 project(TorchWindow VERSION 0.1.1
@@ -7,8 +7,6 @@ project(TorchWindow VERSION 0.1.1
 
 # specify the C standard
 #set(CMAKE_C_STANDARD 89)
-
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS on)
 
 add_executable(torchwindow src/torchwindow.c)
 target_include_directories(torchwindow PRIVATE inc)
@@ -19,7 +17,7 @@ add_subdirectory("src/twvulkan")
 add_subdirectory("src/twcuda")
 add_subdirectory("src/twconnect")
 
-target_link_libraries(torchwindow twinterface)
+target_link_libraries(torchwindow twvulkan)
 
 target_include_directories(
    twinterface PUBLIC
@@ -33,9 +31,10 @@ target_link_libraries(
    twconnect
 )
 target_link_libraries(twcuda twconnect)
-target_link_libraries(twconnect twvulkan)
 target_link_libraries(twvulkan twconnect)
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS off)
+
+#target_link_libraries(twconnect twvulkan)
+#set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS off)
 
 # copy compiled library files to torchwindow directory
 
@@ -43,13 +42,13 @@ add_custom_command(TARGET twinterface POST_BUILD
 COMMAND "${CMAKE_COMMAND}" -E copy_if_different 
    "$<TARGET_FILE:twinterface>"
    "${PROJECT_SOURCE_DIR}/torchwindow/$<TARGET_FILE_NAME:twinterface>"
-COMMENT "Copying twinterface.dll to torchwindow directory")
+COMMENT "Copying twinterface dynamic library to torchwindow directory")
 
 add_custom_command(TARGET torchwindow POST_BUILD 
 COMMAND "${CMAKE_COMMAND}" -E copy_if_different 
    "$<TARGET_FILE:torchwindow>"
    "${PROJECT_SOURCE_DIR}/torchwindow/$<TARGET_FILE_NAME:torchwindow>" 
-COMMENT "Copying torchwindow.exe to torchwindow directory")
+COMMENT "Copying torchwindow executable to torchwindow directory")
 
 add_custom_command(TARGET torchwindow POST_BUILD 
 COMMAND "${CMAKE_COMMAND}" -E copy_if_different 

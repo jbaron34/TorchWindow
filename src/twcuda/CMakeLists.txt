@@ -1,9 +1,17 @@
+if(MSVC)
+    set(KERNEL_LIB_PATH ${PROJECT_SOURCE_DIR}/ext/build/$<CONFIG>/twkern.lib)
+    set(CUDA_RT_LIB_PATH $ENV{CUDA_PATH}/lib/x64/cudart.lib)
+else()
+    set(KERNEL_LIB_PATH ${PROJECT_SOURCE_DIR}/ext/build/libtwkern.a)
+    set(CUDA_RT_LIB_PATH $ENV{CUDA_PATH}/lib64/libcudart_static.a)
+endif()
+
 # build the external kernel library
 file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/ext/build)
 execute_process(COMMAND "cmake" ".."
    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/ext/build")
 add_custom_target(kernel ALL
-   COMMAND cmd /c "cmake" "--build" "." "--config" "$<CONFIG>"
+   COMMAND cmake "--build" "." "--config" "$<CONFIG>"
    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/ext/build"
    COMMENT "running external kernel build")
 
@@ -17,7 +25,7 @@ target_include_directories(
 )
 target_link_libraries(
     twcuda
-    ${PROJECT_SOURCE_DIR}/ext/build/$<CONFIG>/twkern.lib
-    $ENV{CUDA_PATH}/lib/x64/cudart.lib
+    ${KERNEL_LIB_PATH}
+    ${CUDA_RT_LIB_PATH}
 )
 add_dependencies(twcuda kernel)

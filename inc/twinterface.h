@@ -11,10 +11,10 @@ struct TwWindowHandle_T{
 
 void* createWindow(int winWidth, int winHeight, int texWidth, int texHeight, const char *name, const char *dir);
 
-void destroyWindow(void *window);
+void destroyWindow(TwWindowHandle window);
 
 void draw(
-    void *windowHandle,
+    TwWindowHandle windowHandle,
     void *dataptr,
     int dimA, int dimB, int dimC
 );

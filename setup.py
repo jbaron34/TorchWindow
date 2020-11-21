@@ -16,11 +16,11 @@ setup(
     packages=['torchwindow'],
     package_data={
         'torchwindow': [
-            'twinterface.dll',
-            'torchwindow.exe',
+            'libtwinterface.so',
+            'torchwindow',
             'frag.spv',
             'vert.spv',
-            'SDL2.dll'
+            'libSDL2.so'
         ]
     },
     platforms=['x64-Windows'],
@@ -30,7 +30,7 @@ setup(
     long_description_content_type='text/markdown',
     long_description=open('README.md').read(),
     install_requires=[
-        "torch >= 0.4"
+    #    "torch >= 0.4"
     ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
