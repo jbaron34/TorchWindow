@@ -228,10 +228,15 @@ void twSetupVkInstance(TwWindow window){
         &createInfo.ppEnabledExtensionNames
     );
 
+#ifdef DEBUG
     createInfo.enabledLayerCount = 1;
     const char *validationLayers[] = {
         "VK_LAYER_KHRONOS_validation",
     };
+#else
+    createInfo.enabledLayerCount = 0;
+    const char **validationLayers = NULL;
+#endif
     createInfo.ppEnabledLayerNames = validationLayers;
     twCheckVkValidationLayerSupport(
         createInfo.enabledLayerCount,

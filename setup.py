@@ -10,7 +10,7 @@ class BinaryDistribution(Distribution):
 
 setup(
     name='TorchWindow',
-    version='0.1.0',
+    version='0.1.1',
     author='jbaron34',
     author_email='jbaron34@gmail.com',
     packages=['torchwindow'],
